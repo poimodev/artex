@@ -1,0 +1,11 @@
+curl
+wget
+git
+jq
+unzip
+ripgrep
+dnsutils
+iputils-ping
+netcat-openbsd
+whois
+nmap

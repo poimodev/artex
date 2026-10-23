@@ -1,0 +1,37 @@
+# Render Blueprint for ARTEX + Groq.
+# Keep this service private to your team and test only systems you own or are authorized to assess.
+services:
+  - type: web
+    name: artex-global
+    runtime: docker
+    plan: starter
+    dockerfilePath: ./Dockerfile.render
+    dockerContext: .
+    healthCheckPath: /api/health
+    envVars:
+      - key: ARTEX_PG_DSN
+        fromDatabase:
+          name: artex-db
+          property: connectionString
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: ARTEX_LLM_PROVIDER
+        value: openai
+      - key: ARTEX_LLM_BASE_URL
+        value: https://api.groq.com/openai/v1
+      - key: ARTEX_LLM_MODEL
+        value: llama-3.3-70b-versatile
+      - key: ARTEX_ADMIN_PASSWORD
+        sync: false
+      - key: ARTEX_LANG
+        value: ja
+    disk:
+      name: artex-data
+      mountPath: /var/data
+      sizeGB: 1
+
+databases:
+  - name: artex-db
+    plan: basic-256mb
+    databaseName: artex
+    user: artex
